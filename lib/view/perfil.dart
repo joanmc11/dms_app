@@ -1,6 +1,8 @@
+import 'package:dms_app/view/add_player_form.dart';
 import 'package:dms_app/widgets/profile_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class Perfil extends StatelessWidget {
   const Perfil({super.key});
@@ -33,18 +35,28 @@ class Perfil extends StatelessWidget {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.only(top:16.0, bottom: 8.0),
-              child: Text("Opciones de Liga", style: TextStyle(fontSize: 18),),
+              padding: EdgeInsets.only(top: 16.0, bottom: 8.0),
+              child: Text(
+                "Opciones de Liga",
+                style: TextStyle(fontSize: 18),
+              ),
             ),
-            const ProfileMenu(text: "Añadir jugador", icon: FontAwesomeIcons.user),
-            const ProfileMenu(text: "Puntuar Jornada", icon: Icons.sports_soccer_outlined),
+            ProfileMenu(
+              text: "Añadir jugador",
+              icon: FontAwesomeIcons.user,
+              press: () {
+                Get.to(()=>AddPlayer());
+              },
+            ),
+            const ProfileMenu(
+                text: "Puntuar Jornada", icon: Icons.sports_soccer_outlined),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: ElevatedButton.icon(onPressed: (){}, icon: const FaIcon(Icons.start), label: const Text("Empezar jornada")),
+              child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const FaIcon(Icons.start),
+                  label: const Text("Empezar jornada")),
             ),
-    
-    
-    
           ],
         ),
       ),

@@ -21,9 +21,9 @@ class ProfileMenu extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          side: BorderSide(color: Colors.red),
+          side: const BorderSide(color: Colors.red),
         ),
-        onPressed: () {},
+        onPressed: press,
         child: Row(
           children: [
             Icon(icon),

@@ -8,57 +8,57 @@ class TeamScreen extends StatelessWidget {
   final List<Player> players = [
     Player(
         id: 1,
-        name: "Joan",
-        surename: "Marine",
+        name: "Player 1",
+        surename: "Player 1",
         points: 0,
         image: "",
         goalkeeper: false),
     Player(
         id: 1,
-        name: "Alvaro",
-        surename: "Cercos",
+        name: "Player 2",
+        surename: "Player 2",
         points: 0,
         image: "",
         goalkeeper: false),
     Player(
         id: 1,
-        name: "Gerard",
-        surename: "Solé",
+        name: "Player 3",
+        surename: "Player 3",
         points: 0,
         image: "",
         goalkeeper: false),
     Player(
         id: 1,
-        name: "Marc",
-        surename: "Jauregui",
+        name: "Player 4",
+        surename: "Player 4",
         points: 0,
         image: "",
         goalkeeper: false),
     Player(
         id: 1,
-        name: "Marc",
-        surename: "Solá",
+        name: "Goalkeeper 1",
+        surename: "Goalkeeper 1",
         points: 0,
         image: "",
         goalkeeper: true),
     Player(
         id: 1,
-        name: "Marc",
-        surename: "Grau",
+        name: "Player 5",
+        surename: "Player 5",
         points: 0,
         image: "",
         goalkeeper: false),
     Player(
         id: 1,
-        name: "Jan",
-        surename: "Aranyó",
+        name: "Player 6",
+        surename: "Player 6",
         points: 0,
         image: "",
         goalkeeper: false),
     Player(
         id: 1,
-        name: "Imanol",
-        surename: "Cognom",
+        name: "Goalkeeper 2",
+        surename: "Goalkeeper 2",
         points: 0,
         image: "",
         goalkeeper: true),
@@ -125,11 +125,11 @@ class TeamScreen extends StatelessWidget {
             ],
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          const Padding(
+            padding: EdgeInsets.all(20.0),
             child: Center(child: Text("Jugadores DMS", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red))),
           ),
-          Divider(color: Colors.red, height: 5, thickness: 2),
+          const Divider(color: Colors.red, height: 5, thickness: 2),
 
           ...players
               .map((player) => Column(
