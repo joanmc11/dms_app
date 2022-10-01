@@ -62,29 +62,12 @@ class TeamScreen extends StatelessWidget {
         points: 0,
         image: "",
         goalkeeper: true),
-    Player(
-        id: 1,
-        name: "Imanol",
-        surename: "Cognom",
-        points: 0,
-        image: "",
-        goalkeeper: true),
-    Player(
-        id: 1,
-        name: "Imanol",
-        surename: "Cognom",
-        points: 0,
-        image: "",
-        goalkeeper: true),
+    
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Center(child: Text('Mi Equipo')),
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(children: [
           Stack(
             children: [
@@ -165,8 +148,7 @@ class TeamScreen extends StatelessWidget {
                   ))
               .toList()
         ]),
-      ),
-    );
+      );
   }
 
   _showPlayerList(context) {
@@ -182,8 +164,8 @@ class TeamScreen extends StatelessWidget {
         title: const Text("Escoje un jugador para esta posición"),
         actions: [
           SizedBox(
-            height: 400.0,
-            width: 400.0,
+            height: 350.0,
+            width: 350.0,
             child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
@@ -218,8 +200,8 @@ class TeamScreen extends StatelessWidget {
         title: const Text("Escoje un portero"),
         actions: [
           SizedBox(
-            height: 400.0,
-            width: 400.0,
+            height: 350.0,
+            width: 350.0,
             child: ListView.separated(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
