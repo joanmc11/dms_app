@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 class FunctionService {
 
-  Future imagenMulta(context, callbackImgPath, Function callbackImage) async {
+  Future imagenMulta(context, callbackImgPath, ) async {
     await showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -25,9 +25,9 @@ class FunctionService {
                     if (image == null) return;
 
                     final imageFile = File(image.path);
-                    callbackImage(imageFile);
+                    
 
-                    callbackImgPath(image.name, imageFile);
+                   await callbackImgPath(image.name, imageFile);
                     Navigator.of(context).pop();
                   },
                   child: Column(
@@ -44,9 +44,9 @@ class FunctionService {
                     if (image == null) return;
 
                     final imageFile = File(image.path);
-                    callbackImage(imageFile);
+                  
 
-                    callbackImgPath(image.name, imageFile);
+                    await callbackImgPath(image.name, imageFile);
                     Navigator.of(context).pop();
                   },
                   child: Column(

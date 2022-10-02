@@ -8,7 +8,7 @@ class UserModel {
   final bool admin;
   final String name;
   final String avatar;
-  final List<Player>? players;
+  final List<PlayerModel>? players;
   final int points;
   final int position;
 

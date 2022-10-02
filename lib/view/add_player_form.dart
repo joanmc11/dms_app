@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dms_app/service/firebase_service.dart';
 import 'package:dms_app/service/function_service.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -12,19 +13,14 @@ class AddPlayer extends StatefulWidget {
   State<AddPlayer> createState() => _AddPlayerState();
 }
 
-String imgPath = "";
-File? imgFile;
-
 class _AddPlayerState extends State<AddPlayer> {
+  String imgPath = '';
+  File? _image;
   callbackImgPath(varImgPath, varImgFile) {
     setState(() {
       imgPath = varImgPath;
-      imgFile = varImgFile;
+      _image = varImgFile;
     });
-  }
-
-  callbackImage(imageFile) {
-    _image = imageFile;
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -32,7 +28,7 @@ class _AddPlayerState extends State<AddPlayer> {
   bool goalkeeper = false;
   bool jugador = true;
   String pos = 'jugador';
-  File? _image;
+
   String name = '';
   String surename = '';
 
@@ -112,8 +108,7 @@ class _AddPlayerState extends State<AddPlayer> {
               ),
               InkWell(
                 onTap: (() {
-                  FunctionService()
-                      .imagenMulta(context, callbackImgPath, callbackImage);
+                  FunctionService().imagenMulta(context, callbackImgPath);
                 }),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -143,11 +138,17 @@ class _AddPlayerState extends State<AddPlayer> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Jugador Añadido')),
                         );
+                        await FirebaseService().addPlayer(
+                            name: name,
+                            surename: surename,
+                            goalkeeper: goalkeeper,
+                            imageFile: _image,
+                            imagePath: imgPath);
                         Get.back();
                       }
                     },
