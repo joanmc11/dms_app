@@ -5,28 +5,7 @@ import 'package:dms_app/models/player_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseService {
-  final db = FirebaseFirestore.instance;
-  Future addPlayer(
-      {required String name,
-      required String surename,
-      String imagePath = 'sinpath',
-      File? imageFile,
-      required bool goalkeeper}) async {
-    await db.collection('players').add({
-      'name': name,
-      'surename': surename,
-      'points': 0,
-      'image': 'jugadores/$imagePath',
-      'goalkeeper': goalkeeper
-    });
-
-    imagePath == ''
-        ? null
-        : await FirebaseStorage.instance
-            .ref()
-            .child('jugadores/$imagePath')
-            .putFile(imageFile!);
-  }
+  
 
   Stream<List<T>> collectionStream<T>({
     required String path,

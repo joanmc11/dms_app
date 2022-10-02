@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dms_app/service/firebase_service.dart';
 import 'package:dms_app/service/function_service.dart';
+import 'package:dms_app/service/write_service_database.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -143,7 +144,7 @@ class _AddPlayerState extends State<AddPlayer> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Jugador Añadido')),
                         );
-                        await FirebaseService().addPlayer(
+                        await WriteService().addPlayer(
                             name: name,
                             surename: surename,
                             goalkeeper: goalkeeper,

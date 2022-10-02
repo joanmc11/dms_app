@@ -1,4 +1,5 @@
 import 'package:dms_app/firebase_options.dart';
+import 'package:dms_app/utils/wrapper.dart';
 import 'package:dms_app/view/navigation_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'My Team App',
       theme: ThemeData(
           primarySwatch: Colors.red, secondaryHeaderColor: Colors.yellow),
-      home: NavigationPage(),
+      home: Wrapper(),
     );
   }
 }

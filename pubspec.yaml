@@ -32,10 +32,13 @@ dependencies:
   cloud_firestore: ^3.5.0
   cupertino_icons: ^1.0.2
   dotted_border: ^2.0.0+2
+  email_validator: ^2.1.17
+  firebase_auth: ^3.11.0
   firebase_core: ^1.24.0
   firebase_storage: ^10.3.10
   flutter:
     sdk: flutter
+  flutter_spinkit: ^5.1.0
   font_awesome_flutter: ^10.2.1
   get: ^4.6.5
   image_picker: ^0.8.5+3
