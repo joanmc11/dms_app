@@ -224,8 +224,10 @@ class TeamScreen extends StatelessWidget {
               itemCount: fieldPlayers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  onTap: () => WriteService()
-                      .updateUserPlayers(fieldPlayers[index].id, position),
+                  onTap: (){ WriteService()
+                      .updateUserPlayers(fieldPlayers[index].id, position);
+                       Navigator.pop(context);
+                      },
                   title: Text(
                       '${fieldPlayers[index].name} ${fieldPlayers[index].surename}'),
                   leading: fieldPlayers[index].image == ''
@@ -276,8 +278,10 @@ class TeamScreen extends StatelessWidget {
               itemCount: goalkeepers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  onTap: () => WriteService()
-                      .updateUserPlayers(goalkeepers[index].id, "portero"),
+                  onTap: () { WriteService()
+                      .updateUserPlayers(goalkeepers[index].id, "portero");
+                      Navigator.pop(context);
+                      },
                   title: Text(
                       '${goalkeepers[index].name} ${goalkeepers[index].surename}'),
                   leading: goalkeepers[index].image == ''
