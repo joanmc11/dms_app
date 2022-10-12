@@ -4,6 +4,7 @@ import 'package:dms_app/service/auth_service.dart';
 import 'package:dms_app/service/data_services.dart';
 import 'package:dms_app/service/user_pref_service.dart';
 import 'package:dms_app/view/add_player_form.dart';
+import 'package:dms_app/view/puntuar_jornada.dart';
 import 'package:dms_app/widgets/profile_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -59,13 +60,13 @@ class Perfil extends StatelessWidget {
                       ProfileMenu(
                         text: "Añadir jugador",
                         icon: FontAwesomeIcons.user,
-                        press: () {
-                          Get.to(() => AddPlayer());
-                        },
+                        press: () => Get.to(() => const AddPlayer()),
                       ),
-                      const ProfileMenu(
-                          text: "Puntuar Jornada",
-                          icon: Icons.sports_soccer_outlined),
+                      ProfileMenu(
+                        text: "Puntuar Jornada",
+                        icon: Icons.sports_soccer_outlined,
+                        press: (() => Get.to(() => PuntuarJornada())),
+                      ),
                       Padding(
                         padding: const EdgeInsets.all(32.0),
                         child: ElevatedButton.icon(
