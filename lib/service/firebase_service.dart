@@ -5,8 +5,6 @@ import 'package:dms_app/models/player_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseService {
-  
-
   Stream<List<T>> collectionStream<T>({
     required String path,
     required T Function(Map<String, dynamic> data, String documentID) builder,
@@ -29,5 +27,17 @@ class FirebaseService {
       }
       return result;
     });
+  }
+
+  Stream<T> documentStream<T>({
+    required String path,
+    required T Function(Map<String, dynamic> data, String documentID) builder,
+  }) {
+    final DocumentReference<Map<String, dynamic>> reference =
+        FirebaseFirestore.instance.doc(path);
+    final Stream<DocumentSnapshot<Map<String, dynamic>>> snapshots =
+        reference.snapshots();
+    return snapshots
+        .map((snapshot) => builder(snapshot.data() ?? {}, snapshot.id));
   }
 }

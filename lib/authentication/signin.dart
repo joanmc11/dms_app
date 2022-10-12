@@ -107,13 +107,15 @@ class _SignInState extends State<SignIn> {
                                   dynamic result =
                                       await _auth.signInWithEmailAndPassword(
                                           email, password);
+                                  setState(() {
+                                    loading = false;
+                                  });
 
                                   if (result == null) {
                                     setState(() {
                                       error = "Email o contraseña incorrectos";
                                       loading = false;
                                     });
-                                   
                                   }
                                 }
                               },

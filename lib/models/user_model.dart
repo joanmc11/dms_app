@@ -5,11 +5,11 @@ class UserModel {
   final bool admin;
   final String name;
   final String avatar;
-  final PlayerModel? pivot;
-  final PlayerModel? alaIzq;
-  final PlayerModel? alaDer;
-  final PlayerModel? cierre;
-  final PlayerModel? portero;
+  final String? pivot;
+  final String? alaIzq;
+  final String? alaDer;
+  final String? cierre;
+  final String? portero;
   final int points;
   final int position;
 
@@ -28,16 +28,17 @@ class UserModel {
 
 
        UserModel.fromMap(Map snapshot, this.id)
-      : name = snapshot['name'],
-        admin = snapshot['admin'],
-        points = snapshot['points'],
-        avatar = snapshot['avatar'],
-        position = snapshot['position'],
-        pivot = snapshot['pivot'],
-        alaIzq = snapshot['alaIzq'],
-        alaDer = snapshot['alaDer'],
-        cierre = snapshot['cierre'],
-        portero = snapshot['portero'];
+      : 
+      name = snapshot['name'],
+        admin = snapshot['admin'] ,
+        points = snapshot['points'] ,
+        avatar = snapshot['avatar'] ,
+        position = snapshot['position'] ?? 1,
+        pivot = snapshot['pivot'] ?? "",
+        alaIzq = snapshot['alaIzq'] ?? "",
+        alaDer = snapshot['alaDer'] ?? "",
+        cierre = snapshot['cierre'] ?? "",
+        portero = snapshot['portero'] ?? "";
 
   Map<String, dynamic> toJson() => {
         "id": id,

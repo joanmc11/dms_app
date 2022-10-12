@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dms_app/controller/login_controller.dart';
 import 'package:dms_app/controller/navigation_controller.dart';
+import 'package:dms_app/service/user_pref_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
@@ -38,12 +39,22 @@ class WriteService{
     final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
     return await userCollection.doc(uid).set({
-      'nombre': nombre,
+      'name': nombre,
       'id': uid,
       'points': 0,
       'position': 1,
       'admin':false,
       'avatar':''
+    });
+  }
+
+  //Update user players
+  Future updateUserPlayers(String playerId, position) async {
+     UserPreferences prefs = UserPreferences();
+    final CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('users');
+    return await userCollection.doc(prefs.uid).update({
+      '$position': playerId,
     });
   }
 }

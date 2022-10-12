@@ -124,7 +124,9 @@ class _LogInState extends State<LogIn> {
                                       await _auth.registerWithEmailAndPassword(
                                           nickname, email, password);
 
-                                 
+                                 setState(() {
+                                    loading = false;
+                                  });
                                   }
                                 }
                               

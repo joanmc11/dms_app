@@ -6,5 +6,6 @@ class LoginController extends GetxController{
 
   void setId(String id){
     userId.value = id;
+    update(['wrapper']);
   }
 }

@@ -18,12 +18,17 @@ class ClasificationScreen extends StatelessWidget {
                 padding: EdgeInsets.all(16.0),
                 child: ToggleButtonsClasification(),
               ),
-              StreamBuilder(
+              StreamBuilder<List<UserModel>>(
                   stream: DataServices().userList(),
                   builder: (BuildContext context,
                       AsyncSnapshot<List<UserModel>> snapshot) {
+                       if(snapshot.hasError){
+                        print(snapshot.error);
+                        return Text(snapshot.error.toString());
+                       }
                     if (snapshot.hasData) {
                       var users = snapshot.data!;
+                       print(snapshot.data);
                       return ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -32,9 +37,16 @@ class ClasificationScreen extends StatelessWidget {
                             final user = users[index];
                             print(user);
                             return ListTile(
+                              
                               leading: user.avatar == ""
-                                  ? const CircleAvatar(
-                                      child: Icon(Icons.sports_bar))
+                                  ? Stack(children: [ const Padding(
+                                    padding: EdgeInsets.only(left:32.0),
+                                    child: CircleAvatar(
+                                        child: Icon(Icons.sports_bar)),
+                                  ), Padding(
+                                    padding: const EdgeInsets.only(top:8.0),
+                                    child: Text("${index+1}.", style: TextStyle(fontSize: 25),),
+                                  ),])
                                   : Container(),
                               title: Text(user.name),
                               trailing: Text(

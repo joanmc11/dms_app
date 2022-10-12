@@ -16,9 +16,9 @@ class PlayerModel {
 
   PlayerModel.fromMap(Map snapshot, this.id)
       : name = snapshot['name'],
-        surename = snapshot['surename'],
+        surename = snapshot['surename'] ?? "",
         points = snapshot['points'],
-        image = snapshot['image'],
+        image = snapshot['image'] ?? "",
         goalkeeper = snapshot['goalkeeper'];
 
   Map<String, dynamic> toJson() => {

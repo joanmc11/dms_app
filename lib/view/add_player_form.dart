@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:dms_app/service/firebase_service.dart';
 import 'package:dms_app/service/function_service.dart';
 import 'package:dms_app/service/write_service_database.dart';
 import 'package:dotted_border/dotted_border.dart';
