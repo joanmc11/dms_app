@@ -4,6 +4,7 @@ class PlayerModel {
   final int points;
   final String image;
   final bool goalkeeper;
+  final int jornada;
 
   PlayerModel({
     required this.id,
@@ -12,6 +13,7 @@ class PlayerModel {
     required this.points,
     required this.image,
     required this.goalkeeper,
+    required this.jornada
   });
 
   PlayerModel.fromMap(Map snapshot, this.id)
@@ -19,7 +21,8 @@ class PlayerModel {
         surename = snapshot['surename'] ?? "",
         points = snapshot['points'],
         image = snapshot['image'] ?? "",
-        goalkeeper = snapshot['goalkeeper'];
+        goalkeeper = snapshot['goalkeeper'],
+        jornada = snapshot['jornada'];
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -27,6 +30,7 @@ class PlayerModel {
         "surename": surename,
         "points": points,
         "image": image,
-        "goalkeeper": goalkeeper
+        "goalkeeper": goalkeeper,
+        "jornada": jornada,
       };
 }

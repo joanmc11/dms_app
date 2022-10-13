@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dms_app/models/liga_model.dart';
 import 'package:dms_app/models/player_model.dart';
 import 'package:dms_app/models/user_model.dart';
@@ -27,6 +28,7 @@ class TeamScreen extends StatelessWidget {
                   (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
                 if (snapshot.hasData) {
                   var user = snapshot.data!;
+                  List<String> playersGetList = [user.pivot!, user.alaDer!, user.alaIzq!, user.cierre!];
                   return StreamBuilder(
                     stream: DataServices().liga(),
                     builder: (BuildContext context,
@@ -47,7 +49,9 @@ class TeamScreen extends StatelessWidget {
                                     onTap: () => liga.jornada
                                         ? _showMessage(context)
                                         : _showPlayerList(
-                                            context, players, "pivot"),
+                                            context, players, "pivot", 
+                                            playersGetList
+                                            ),
                                     child: PlayerField(
                                       playerName: "Pivot",
                                       imagePlayer: "",
@@ -64,7 +68,7 @@ class TeamScreen extends StatelessWidget {
                                   onTap: () => liga.jornada
                                       ? _showMessage(context)
                                       : _showPlayerList(
-                                          context, players, "alaIzq"),
+                                          context, players, "alaIzq", playersGetList),
                                   child: PlayerField(
                                     playerName: "Ala Izq",
                                     imagePlayer: "",
@@ -80,7 +84,7 @@ class TeamScreen extends StatelessWidget {
                                   onTap: () => liga.jornada
                                       ? _showMessage(context)
                                       : _showPlayerList(
-                                          context, players, "alaDer"),
+                                          context, players, "alaDer", playersGetList),
                                   child: PlayerField(
                                     playerName: "Ala Der",
                                     imagePlayer: "",
@@ -96,7 +100,7 @@ class TeamScreen extends StatelessWidget {
                                     onTap: () => liga.jornada
                                         ? _showMessage(context)
                                         : _showPlayerList(
-                                            context, players, "cierre"),
+                                            context, players, "cierre", playersGetList),
                                     child: PlayerField(
                                       playerName: "Cierre",
                                       imagePlayer: "",
@@ -203,11 +207,22 @@ class TeamScreen extends StatelessWidget {
     );
   }
 
-  _showPlayerList(context, players, position) {
+  _showPlayerList(context, players, position, List<String> idPlayersPicked) async{
     List<PlayerModel> fieldPlayers = [];
     for (var fieldPlayer in players) {
-      fieldPlayer.goalkeeper ? null : fieldPlayers.add(fieldPlayer);
+      int count = 0;
+      for(var pickedPlayer in idPlayersPicked){
+        if(fieldPlayer.id == pickedPlayer){
+          count++;
+        }
+      }
+      if(count==0){
+        fieldPlayer.goalkeeper ? null : fieldPlayers.add(fieldPlayer);
+      }
+      
     }
+
+
 
     showDialog(
       context: context,
