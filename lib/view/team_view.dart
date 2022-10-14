@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:dms_app/models/liga_model.dart';
 import 'package:dms_app/models/player_model.dart';
 import 'package:dms_app/models/user_model.dart';
@@ -20,6 +20,9 @@ class TeamScreen extends StatelessWidget {
         stream: DataServices().playersList(),
         builder:
             (BuildContext context, AsyncSnapshot<List<PlayerModel>> snapshot) {
+              if(snapshot.hasError){
+                return Text(snapshot.error.toString());
+              }
           if (snapshot.hasData) {
             var players = snapshot.data!;
             return StreamBuilder(
@@ -79,7 +82,7 @@ class TeamScreen extends StatelessWidget {
 
                               Positioned(
                                 top: 190,
-                                left: MediaQuery.of(context).size.width / 1.4,
+                                left: MediaQuery.of(context).size.width / 1.5,
                                 child: GestureDetector(
                                   onTap: () => liga.jornada
                                       ? _showMessage(context)

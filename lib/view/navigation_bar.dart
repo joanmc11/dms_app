@@ -13,8 +13,8 @@ class NavigationPage extends StatelessWidget {
   NavigationPage({super.key});
 
   final views = [
-    TeamScreen(),
-    const ClasificationScreen(),
+    const TeamScreen(),
+    ClasificationScreen(),
     const Perfil(),
   ];
 

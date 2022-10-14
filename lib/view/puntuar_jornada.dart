@@ -17,7 +17,6 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
   Map yellowDynamic = {};
   Map redDynamic = {};
   Map mvpDynamic = {};
-  Map checkedDynamic = {};
   Map encDynamic = {};
   bool win = false;
 
@@ -55,6 +54,7 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
                         }),
                   ],
                 ),
+                const Divider(color: Colors.red, thickness: 2),
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
@@ -67,8 +67,7 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
                       yellowDynamic[index] = yellowDynamic[index] ?? false;
                       redDynamic[index] = redDynamic[index] ?? false;
                       mvpDynamic[index] = mvpDynamic[index] ?? false;
-                      checkedDynamic[index] = checkedDynamic[index] ?? false;
-
+                    
                       return Column(
                         children: [
                           ListTile(
@@ -94,13 +93,13 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
                                       );
                                     }),
                             subtitle: const Text('Puntua abajo este jugador'),
-                            trailing: checkedDynamic[index]
+                            trailing: player.punctuated
                                 ? const Text("Puntos subidos", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),)
                                 : ElevatedButton(
                                     onPressed: () {
                                       player.goalkeeper
                                           ? _showAlertDialog(context,
-                                              player.name, player.surename, () {
+                                              player.name, player.surename, () async{
                                               WriteService()
                                                   .updatePointsGoalkeeper(
                                                       player.id,
@@ -111,13 +110,11 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
                                                       win,
                                                       player.points,
                                                       encDynamic[index]);
-                                              setState(() {
-                                                checkedDynamic[index] = true;
-                                              });
+                                              await WriteService().checkPlayer(player.id);
                                               Navigator.pop(context);
                                             })
                                           : _showAlertDialog(context,
-                                              player.name, player.surename, () {
+                                              player.name, player.surename, () async{
                                               WriteService().updatePointsPlayer(
                                                   player.id,
                                                   yellowDynamic[index],
@@ -126,16 +123,15 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
                                                   goalDynamic[index],
                                                   win,
                                                   player.points);
-                                              setState(() {
-                                                checkedDynamic[index] = true;
-                                              });
+                                              
+                                              await WriteService().checkPlayer(player.id);
                                               Navigator.pop(context);
                                             });
                                     },
                                     child: const Text("Subir Puntos"),
                                   ),
                           ),
-                          !checkedDynamic[index]
+                          !player.punctuated
                               ? Column(
                                   children: [
                                     Row(
@@ -298,11 +294,11 @@ class _PuntuarJornadaState extends State<PuntuarJornada> {
       BuildContext context, String name, String surename, Function press) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Cancelar"),
+      child: const Text("Cancelar"),
       onPressed: () => Navigator.pop(context),
     );
     Widget continueButton = TextButton(
-      child: Text("Continuar"),
+      child: const Text("Continuar"),
       onPressed: () => press(),
     );
     // set up the AlertDialog

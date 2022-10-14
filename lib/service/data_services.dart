@@ -10,10 +10,16 @@ class DataServices {
       path: "players",
       builder: (data, documentId) => PlayerModel.fromMap(data, documentId));
 
-  Stream<List<UserModel>> userList() => FirebaseService().collectionStream(
-      path: "users",
-      queryBuilder: (query) => query.orderBy('points', descending: true),
-      builder: (data, documentId) => UserModel.fromMap(data, documentId));
+  Stream<List<UserModel>> userGeneralList() =>
+      FirebaseService().collectionStream(
+          path: "users",
+          queryBuilder: (query) => query.orderBy('points', descending: true),
+          builder: (data, documentId) => UserModel.fromMap(data, documentId));
+  Stream<List<UserModel>> userJornadaList() =>
+      FirebaseService().collectionStream(
+          path: "users",
+          queryBuilder: (query) => query.orderBy('jornada', descending: true),
+          builder: (data, documentId) => UserModel.fromMap(data, documentId));
 
   Stream<UserModel> userInfo(String id) => FirebaseService().documentStream(
       path: "users/$id",
@@ -22,8 +28,8 @@ class DataServices {
   Stream<PlayerModel> playerInfo(String id) => FirebaseService().documentStream(
       path: "players/$id",
       builder: (data, documentId) => PlayerModel.fromMap(data, documentId));
-  
-   Stream<LigaModel> liga() => FirebaseService().documentStream(
+
+  Stream<LigaModel> liga() => FirebaseService().documentStream(
       path: "liga/liga",
       builder: (data, documentId) => LigaModel.fromMap(data));
 }

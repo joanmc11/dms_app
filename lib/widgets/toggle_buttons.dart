@@ -1,7 +1,11 @@
+import 'package:dms_app/controller/clasification_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ToggleButtonsClasification extends StatefulWidget {
-  const ToggleButtonsClasification({super.key});
+   const ToggleButtonsClasification({super.key});
+
+
 
   @override
   State<ToggleButtonsClasification> createState() =>
@@ -16,11 +20,16 @@ class _ToggleButtonsClasificationState
     return ToggleButtons(
       direction: Axis.horizontal,
       onPressed: ((index) {
+           ClasificationController clasificationController =
+      Get.put(ClasificationController());
         setState(() {
           for (int i = 0; i < _selectedButton.length; i++) {
             _selectedButton[i] = i == index;
+          clasificationController.toggleJornada(!_selectedButton[i]);
           }
         });
+        
+        
       }),
       isSelected: _selectedButton,
       borderRadius: const BorderRadius.all(Radius.circular(8)),
