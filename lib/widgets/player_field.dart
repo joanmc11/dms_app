@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 
 class PlayerField extends StatelessWidget {
   const PlayerField(
-      {super.key, required this.playerName, required this.imagePlayer, this.playerId = ""});
+      {super.key,
+      required this.playerName,
+      required this.imagePlayer,
+      this.playerId = ""});
 
   final String playerName;
   final String imagePlayer;
@@ -32,59 +35,78 @@ class PlayerField extends StatelessWidget {
               stream: DataServices().playerInfo(playerId!),
               builder:
                   (BuildContext context, AsyncSnapshot<PlayerModel> snapshot) {
-                    if(snapshot.hasError){
-                      return Text(snapshot.error.toString());
-                    }
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
                 if (snapshot.hasData) {
                   var player = snapshot.data!;
                   return Stack(
-                                    children: [Column(
                     children: [
+                      Column(children: [
                         player.image == ''
-                                  ? const CircleAvatar(
-                                      backgroundColor: Colors.red)
-                                  : FutureBuilder(
-                                        future: FirebaseStorage.instance
-                                            .ref(player.image)
-                                            .getDownloadURL(),
-                                        builder: (context,
-                                            AsyncSnapshot<String> snapshot) {
-                                          debugPrint(snapshot.data);
-                                          if (!snapshot.hasData) {
-                                            return const CircularProgressIndicator();
-                                          }
-                                  
-                                          return CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(snapshot.data!),
-                                          );
-                                        }),
-                                        const SizedBox(height: 4,),
-                                    Text(player.name, style: const TextStyle(color: Colors.white)), 
-                                     Text(player.surename, style: const TextStyle(color: Colors.white)), 
-                                        ]
-                                  ),
-                                  Positioned(
-                                          top:25,
-                                          left: 20,
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            height: 20,
-                                            width: 25,
-                                            decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Colors.red
-                                            ),
-                                            child: Text(player.jornada.toString(), style: TextStyle(color: Colors.white, fontSize: 12),),
-                                          ),
-                                        )
+                            ? const CircleAvatar(backgroundColor: Colors.red)
+                            : FutureBuilder(
+                                future: FirebaseStorage.instance
+                                    .ref(player.image)
+                                    .getDownloadURL(),
+                                builder:
+                                    (context, AsyncSnapshot<String> snapshot) {
+                                  debugPrint(snapshot.data);
+                                  if (!snapshot.hasData) {
+                                    return const CircularProgressIndicator();
+                                  }
+
+                                  return CircleAvatar(
+                                    backgroundImage:
+                                        NetworkImage(snapshot.data!),
+                                  );
+                                }),
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Text(player.name,
+                            style: const TextStyle(color: Colors.white)),
+                        Text(player.surename,
+                            style: const TextStyle(color: Colors.white)),
+                      ]),
+                      _pointsJornadaPlayer(player)
                     ],
                   );
-                }else{
+                } else {
                   return const CircularProgressIndicator();
                 }
               },
             ),
+    );
+  }
+
+  Positioned _pointsJornadaPlayer(PlayerModel player) {
+    Color color = Colors.red;
+    if (player.jornada < 0) {
+      color = Colors.red;
+    } else if (player.jornada >= 0 && player.jornada <= 4) {
+      color = Colors.amber;
+    } else if (player.jornada >= 5 && player.jornada <= 9) {
+      color = Colors.green;
+    } else {
+      color = Colors.blue;
+    }
+    return Positioned(
+      top: 25,
+      left: 20,
+      child: Container(
+        alignment: Alignment.center,
+        height: 20,
+        width: 25,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+        ),
+        child: Text(
+          player.jornada.toString(),
+          style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 }

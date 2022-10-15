@@ -70,15 +70,13 @@ class _AddPlayerState extends State<AddPlayer> {
                   decoration: const InputDecoration(
                     icon: Icon(Icons.person),
                     hintText: 'Apellido del jugador',
-                    labelText: ' Apellido *',
+                    labelText: ' Apellido',
                   ),
                   // The validator receives the text that the user has entered.
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Porfavor introduce un nombre';
-                    }
+                    
                     setState(() {
-                      surename = value;
+                      surename = value ?? '';
                     });
                   },
                 ),

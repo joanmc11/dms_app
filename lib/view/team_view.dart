@@ -5,9 +5,11 @@ import 'package:dms_app/models/user_model.dart';
 import 'package:dms_app/service/data_services.dart';
 import 'package:dms_app/service/user_pref_service.dart';
 import 'package:dms_app/service/write_service_database.dart';
+import 'package:dms_app/view/player_info_view.dart';
 import 'package:dms_app/widgets/player_field.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TeamScreen extends StatelessWidget {
   const TeamScreen({super.key});
@@ -147,6 +149,7 @@ class TeamScreen extends StatelessWidget {
                                 (player) => Column(
                                   children: [
                                     ListTile(
+                                      onTap: () => Get.to(PlayerInfo(player: player)),
                                       title: Text(
                                           '${player.name} ${player.surename}'),
                                       leading: player.image == ''

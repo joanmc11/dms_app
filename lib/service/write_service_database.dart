@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dms_app/controller/login_controller.dart';
 import 'package:dms_app/service/user_pref_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class WriteService {
@@ -18,8 +19,11 @@ class WriteService {
       'name': name,
       'surename': surename,
       'points': 0,
-      'image': 'jugadores/$imagePath',
-      'goalkeeper': goalkeeper
+      'image': imagePath == '' ? '' : 'jugadores/$imagePath',
+      'goalkeeper': goalkeeper,
+      'jornada': 0,
+      'jornadaList': [],
+      'punctuated': false
     });
 
     imagePath == ''
@@ -72,7 +76,8 @@ class WriteService {
       'alaIzq': '',
       'alaDer': '',
       'cierre': '',
-      'portero': ''
+      'portero': '',
+      'jornadaList': []
     });
   }
 
@@ -89,6 +94,18 @@ class WriteService {
   //Update points player
   Future updatePointsPlayer(String playerId, bool yellowCard, bool redCard,
       bool mvp, int goals, bool win, int currentPoints) async {
+    //Get Jornadas
+    Future<List<dynamic>> getJornadas() async {
+      final docRef =
+          FirebaseFirestore.instance.collection('players').doc(playerId);
+      var snapshot = await docRef.get();
+      if (snapshot.exists) {
+        return await snapshot.data()!['jornadaList'];
+      } else {
+        return [];
+      }
+    }
+
     int points = 0;
     int yellow = yellowCard ? -1 : 0;
     int red = redCard ? -4 : 0;
@@ -96,15 +113,32 @@ class WriteService {
     int goalsGame = goals * (win ? 4 : 2);
     points = yellow + red + bestPlayer + goalsGame;
 
+    List<dynamic> listaJornadas = await getJornadas();
+    listaJornadas.add(points);
+
     final CollectionReference userCollection =
         FirebaseFirestore.instance.collection('players');
-    return await userCollection
-        .doc(playerId)
-        .update({'points': currentPoints + points, 'jornada': points});
+    return await userCollection.doc(playerId).update({
+      'points': currentPoints + points,
+      'jornada': points,
+      'jornadaList': listaJornadas
+    });
   }
 
   Future updatePointsGoalkeeper(String playerId, bool yellowCard, bool redCard,
       bool mvp, int goals, bool win, int currentPoints, int scoreGoal) async {
+    //Get Jornadas
+    Future<List<dynamic>> getJornadas() async {
+      final docRef =
+          FirebaseFirestore.instance.collection('players').doc(playerId);
+      var snapshot = await docRef.get();
+      if (snapshot.exists) {
+        return await snapshot.data()!['jornadaList'];
+      } else {
+        return [];
+      }
+    }
+
     int points = 0;
     int yellow = yellowCard ? -1 : 0;
     int red = redCard ? -4 : 0;
@@ -112,11 +146,16 @@ class WriteService {
     int goalsGame = goals * (win ? -1 : -2);
     points = yellow + red + bestPlayer + goalsGame + scoreGoal * 6;
 
+    List<dynamic> listaJornadas = await getJornadas();
+    listaJornadas.add(points);
+
     final CollectionReference userCollection =
         FirebaseFirestore.instance.collection('players');
-    return await userCollection
-        .doc(playerId)
-        .update({'points': currentPoints + points, 'jornada': points});
+    return await userCollection.doc(playerId).update({
+      'points': currentPoints + points,
+      'jornada': points,
+      'jornadaList': listaJornadas
+    });
   }
 
   //Toggle jornada
@@ -149,6 +188,8 @@ class WriteService {
 
   //Finalizar jornada
   Future endJornada() async {
+    //Get player points
+
     Future<int> getPoints(String playerId) async {
       final docRef =
           FirebaseFirestore.instance.collection('players').doc(playerId);
@@ -160,9 +201,19 @@ class WriteService {
       }
     }
 
+    //Get Jornadas
+    Future<List<dynamic>> getJornadas(String userId) async {
+      final docRef = FirebaseFirestore.instance.collection('users').doc(userId);
+      var snapshot = await docRef.get();
+      if (snapshot.exists) {
+        return await snapshot.data()!['jornadaList'];
+      } else {
+        return [];
+      }
+    }
+
     FirebaseFirestore.instance.collection('users').get().then((snapshot) async {
       for (DocumentSnapshot ds in snapshot.docs) {
-        print(ds.get('cierre'));
         int points = (ds.get('pivot') != null
                 ? await getPoints(
                     ds.get('pivot') == '' ? 'sinid' : ds.get('pivot'))
@@ -184,9 +235,13 @@ class WriteService {
                     ds.get('portero') == '' ? 'sinid' : ds.get('portero'))
                 : 0);
 
+        List<dynamic> listaJornadas = await getJornadas(ds.get('id'));
+        listaJornadas.add(points);
+
         ds.reference.update({
           'jornada': points, //Reset jornada
-          'points': points + ds.get('points')
+          'points': points + ds.get('points'),
+          'jornadaList': listaJornadas
         });
       }
     });

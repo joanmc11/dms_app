@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dms_app/controller/login_controller.dart';
 import 'package:dms_app/models/liga_model.dart';
+import 'package:dms_app/models/player_model.dart';
 import 'package:dms_app/models/user_model.dart';
 import 'package:dms_app/service/auth_service.dart';
 import 'package:dms_app/service/data_services.dart';
@@ -55,13 +57,18 @@ class Perfil extends StatelessWidget {
                                       user.name,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize:
-                                              MediaQuery.of(context).size.width *
-                                                  0.1),
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.1),
                                     ),
-                                    IconButton(onPressed: (){
-                                      Get.to( EditName(userName: user.name,));
-                                    }, icon: Icon(Icons.edit))
+                                    IconButton(
+                                        onPressed: () {
+                                          Get.to(EditName(
+                                            userName: user.name,
+                                          ));
+                                        },
+                                        icon: Icon(Icons.edit))
                                   ],
                                 ),
                               ),
@@ -107,28 +114,50 @@ class Perfil extends StatelessWidget {
                                     ),
                               Padding(
                                 padding: const EdgeInsets.all(32.0),
-                                child: ElevatedButton.icon(
-                                    onPressed: user.admin
-                                        ? () {
-                                            _showAlertDialog(context, () async {
-                                              await WriteService().startJornada(
-                                                  !jornada.jornada);
-                                              jornada.jornada
-                                                  ? WriteService().endJornada()
-                                                  : WriteService().newJornada();
-                                              Navigator.pop(context);
-                                            }, jornada.jornada);
-                                          }
-                                        : () {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                              content: Text(jornada.mensaje),
-                                            ));
-                                          },
-                                    icon: const FaIcon(Icons.start),
-                                    label: Text(jornada.jornada
-                                        ? "Finalizar jornada"
-                                        : "Empezar jornada")),
+                                child: StreamBuilder(
+                                   stream: DataServices().playersList(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<PlayerModel>> snapshot) {
+                             if (snapshot.hasData) {
+                          var players = snapshot.data!;
+                                  return ElevatedButton.icon(
+                                      onPressed: user.admin
+                                          ? () {
+                                              if (_checkPlayersPunctuated(players)) {
+                                                _showAlertDialog(context,
+                                                    () async {
+                                                  await WriteService()
+                                                      .startJornada(
+                                                          !jornada.jornada);
+                                                  jornada.jornada
+                                                      ? WriteService()
+                                                          .endJornada()
+                                                      : WriteService()
+                                                          .newJornada();
+                                                  Navigator.pop(context);
+                                                }, jornada.jornada);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      "Faltan jugadores por puntuar"),
+                                                ));
+                                               
+                                              }
+                                            }
+                                          : () {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                content: Text(jornada.mensaje),
+                                              ));
+                                            },
+                                      icon: const FaIcon(Icons.start),
+                                      label: Text(jornada.jornada
+                                          ? "Finalizar jornada"
+                                          : "Empezar jornada"));
+                                }else{
+                                  return const CircularProgressIndicator();
+                                }})
                               )
                             ],
                           );
@@ -188,6 +217,24 @@ class Perfil extends StatelessWidget {
   }
 }
 
+bool _checkPlayersPunctuated(List<PlayerModel> players)  {
+  //Check if all players are punctuated
+  int count = 0;
+  
+  for(var item in players){
+
+    if(item.punctuated){
+      count++;
+    }
+    continue;
+  }
+  if (players.length == count) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 class _imageWidget extends StatefulWidget {
   const _imageWidget({
     Key? key,
@@ -210,7 +257,6 @@ class _imageWidgetState extends State<_imageWidget> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -232,11 +278,11 @@ class _imageWidgetState extends State<_imageWidget> {
                   if (!snapshot.hasData) {
                     return const CircularProgressIndicator();
                   }
-                 
+
                   return CircleAvatar(
-                     radius: MediaQuery.of(context).size.width * 0.18,
+                    radius: MediaQuery.of(context).size.width * 0.18,
                     child: CircleAvatar(
-                      maxRadius:  MediaQuery.of(context).size.width * 0.18,
+                      maxRadius: MediaQuery.of(context).size.width * 0.18,
                       backgroundImage: NetworkImage(snapshot.data!),
                     ),
                   );
@@ -249,17 +295,15 @@ class _imageWidgetState extends State<_imageWidget> {
                 await FunctionService().imagenMulta(context, callbackImgPath);
 
                 if (imgPath != '') {
-                 await WriteService()
+                  await WriteService()
                       .updateUserImage(imagePath: imgPath, imageFile: _image);
                 }
-                setState(() {
-                  
-                });
+                setState(() {});
               },
-              icon:  Icon(
+              icon: Icon(
                 Icons.add_a_photo,
                 size: 40,
-                color: widget.user.avatar=='' ? Colors.black : Colors.red,
+                color: widget.user.avatar == '' ? Colors.black : Colors.red,
               )),
         )
       ]),

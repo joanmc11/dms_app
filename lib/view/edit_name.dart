@@ -1,7 +1,5 @@
 import 'package:dms_app/service/write_service_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class EditName extends StatefulWidget {
   const EditName({super.key, required this.userName});
@@ -25,10 +23,10 @@ class _EditNameState extends State<EditName> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit your name"),
+        title: const Text("Edita tu nombre"),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           child: Column(
             children: [
@@ -53,7 +51,7 @@ class _EditNameState extends State<EditName> {
                     );
                   }
                 },
-                child: const Text('Submit'),
+                child: const Text('Cambiar nombre'),
               ),
             ],
           ),

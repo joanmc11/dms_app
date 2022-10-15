@@ -6,6 +6,7 @@ class PlayerModel {
   final bool goalkeeper;
   final int jornada;
   final bool punctuated;
+  final List<dynamic> jornadaList;
 
   PlayerModel({
     required this.id,
@@ -15,7 +16,8 @@ class PlayerModel {
     required this.image,
     required this.goalkeeper,
     required this.jornada,
-    required this.punctuated
+    required this.punctuated,
+    required this.jornadaList,
   });
 
   PlayerModel.fromMap(Map snapshot, this.id)
@@ -25,7 +27,8 @@ class PlayerModel {
         image = snapshot['image'] ?? "",
         goalkeeper = snapshot['goalkeeper'],
         jornada = snapshot['jornada'] ?? 0,
-        punctuated = snapshot['punctuated'];
+        punctuated = snapshot['punctuated'],
+        jornadaList = snapshot['jornadaList'];
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -36,5 +39,6 @@ class PlayerModel {
         "goalkeeper": goalkeeper,
         "jornada": jornada,
         "punctuated": punctuated,
+        'jornadaList': jornadaList,
       };
 }

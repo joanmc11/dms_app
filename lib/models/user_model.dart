@@ -13,36 +13,37 @@ class UserModel {
   final int points;
   final int position;
   final int jornada;
+  final List<dynamic> jornadaList;
 
-  UserModel(
-      {this.pivot,
-      this.alaIzq,
-      this.alaDer,
-      this.cierre,
-      this.portero,
-      required this.id,
-      required this.admin,
-      required this.name,
-      this.avatar = "",
-      this.points = 0,
-      this.position = 1,
-      this.jornada = 0
-      });
+  UserModel({
+    this.pivot,
+    this.alaIzq,
+    this.alaDer,
+    this.cierre,
+    this.portero,
+    required this.id,
+    required this.admin,
+    required this.name,
+    this.avatar = "",
+    this.points = 0,
+    this.position = 1,
+    this.jornada = 0,
+    required this.jornadaList,
+  });
 
-
-       UserModel.fromMap(Map snapshot, this.id)
-      : 
-      name = snapshot['name'],
-        admin = snapshot['admin'] ,
+  UserModel.fromMap(Map snapshot, this.id)
+      : name = snapshot['name'],
+        admin = snapshot['admin'],
         points = snapshot['points'],
-        avatar = snapshot['avatar'] ,
+        avatar = snapshot['avatar'],
         position = snapshot['position'] ?? 1,
         pivot = snapshot['pivot'] ?? "",
         alaIzq = snapshot['alaIzq'] ?? "",
         alaDer = snapshot['alaDer'] ?? "",
         cierre = snapshot['cierre'] ?? "",
         portero = snapshot['portero'] ?? "",
-        jornada = snapshot['jornada'] ?? 0;
+        jornada = snapshot['jornada'] ?? 0,
+        jornadaList = snapshot['jornadaList'] ?? [];
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -57,6 +58,6 @@ class UserModel {
         'cierre': cierre,
         'portero': portero,
         'jornada': jornada,
-
+        'jornadaList': jornadaList,
       };
 }
