@@ -68,6 +68,7 @@ class _LogInState extends State<LogIn> {
                       ),
                       TextFormField(
                         //email
+                        keyboardType: TextInputType.emailAddress,
                         validator: (val) => EmailValidator.validate(val!)
                             ? null
                             : "Introduce un email válido",
@@ -84,6 +85,7 @@ class _LogInState extends State<LogIn> {
                       ),
                       TextFormField(
                         //password
+                        keyboardType: TextInputType.visiblePassword,
                         validator: (val) => val!.length < 6
                             ? "Introduce una contraseña de mínimo 6 caracteres"
                             : null,

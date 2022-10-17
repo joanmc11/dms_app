@@ -1,4 +1,3 @@
-
 import 'package:dms_app/models/liga_model.dart';
 import 'package:dms_app/models/player_model.dart';
 import 'package:dms_app/models/user_model.dart';
@@ -22,9 +21,9 @@ class TeamScreen extends StatelessWidget {
         stream: DataServices().playersList(),
         builder:
             (BuildContext context, AsyncSnapshot<List<PlayerModel>> snapshot) {
-              if(snapshot.hasError){
-                return Text(snapshot.error.toString());
-              }
+          if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          }
           if (snapshot.hasData) {
             var players = snapshot.data!;
             return StreamBuilder(
@@ -33,7 +32,12 @@ class TeamScreen extends StatelessWidget {
                   (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
                 if (snapshot.hasData) {
                   var user = snapshot.data!;
-                  List<String> playersGetList = [user.pivot!, user.alaDer!, user.alaIzq!, user.cierre!];
+                  List<String> playersGetList = [
+                    user.pivot!,
+                    user.alaDer!,
+                    user.alaIzq!,
+                    user.cierre!
+                  ];
                   return StreamBuilder(
                     stream: DataServices().liga(),
                     builder: (BuildContext context,
@@ -53,10 +57,8 @@ class TeamScreen extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () => liga.jornada
                                         ? _showMessage(context)
-                                        : _showPlayerList(
-                                            context, players, "pivot", 
-                                            playersGetList
-                                            ),
+                                        : _showPlayerList(context, players,
+                                            "pivot", playersGetList),
                                     child: PlayerField(
                                       playerName: "Pivot",
                                       imagePlayer: "",
@@ -72,8 +74,8 @@ class TeamScreen extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () => liga.jornada
                                       ? _showMessage(context)
-                                      : _showPlayerList(
-                                          context, players, "alaIzq", playersGetList),
+                                      : _showPlayerList(context, players,
+                                          "alaIzq", playersGetList),
                                   child: PlayerField(
                                     playerName: "Ala Izq",
                                     imagePlayer: "",
@@ -88,8 +90,8 @@ class TeamScreen extends StatelessWidget {
                                 child: GestureDetector(
                                   onTap: () => liga.jornada
                                       ? _showMessage(context)
-                                      : _showPlayerList(
-                                          context, players, "alaDer", playersGetList),
+                                      : _showPlayerList(context, players,
+                                          "alaDer", playersGetList),
                                   child: PlayerField(
                                     playerName: "Ala Der",
                                     imagePlayer: "",
@@ -104,8 +106,8 @@ class TeamScreen extends StatelessWidget {
                                   child: GestureDetector(
                                     onTap: () => liga.jornada
                                         ? _showMessage(context)
-                                        : _showPlayerList(
-                                            context, players, "cierre", playersGetList),
+                                        : _showPlayerList(context, players,
+                                            "cierre", playersGetList),
                                     child: PlayerField(
                                       playerName: "Cierre",
                                       imagePlayer: "",
@@ -149,7 +151,8 @@ class TeamScreen extends StatelessWidget {
                                 (player) => Column(
                                   children: [
                                     ListTile(
-                                      onTap: () => Get.to(PlayerInfo(player: player)),
+                                      onTap: () =>
+                                          Get.to(PlayerInfo(player: player)),
                                       title: Text(
                                           '${player.name} ${player.surename}'),
                                       leading: player.image == ''
@@ -174,6 +177,7 @@ class TeamScreen extends StatelessWidget {
                                               }),
                                       subtitle:
                                           Text('Puntos: ${player.points}'),
+                                      trailing: _lastPointsJornada(player),
                                     ),
                                     const Divider(
                                       color: Colors.grey,
@@ -205,30 +209,81 @@ class TeamScreen extends StatelessWidget {
     );
   }
 
+  Widget _lastPointsJornada(PlayerModel player) {
+    List<dynamic> lastPoints = player.jornadaList.reversed.toList();
+    return SizedBox(
+      width: 120,
+      child: Row(
+        children: [
+          ListView.builder(
+            shrinkWrap: true,
+            reverse: true,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount:
+                lastPoints.length < 4 ? lastPoints.length : 4,
+            itemBuilder: (BuildContext context, int index) {
+              int points = lastPoints[index];
+              Color color = Colors.red;
+              if (points < 0) {
+                color = Colors.red;
+              } else if (points >= 0 && points <= 4) {
+                color = Colors.amber;
+              } else if (points >= 5 && points <= 9) {
+                color = Colors.green;
+              } else {
+                color = Colors.blue;
+              }
+              
+              return Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: index==0 ? 24 : 17,
+                  width:  index==0 ? 29 : 22,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: color,
+                  ),
+                  child: Text(
+                    points.toString(),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              );
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   _showMessage(context) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
+        duration: Duration(milliseconds: 800),
         content: Text('La jornada ya ha empezado'),
       ),
     );
   }
 
-  _showPlayerList(context, players, position, List<String> idPlayersPicked) async{
+  _showPlayerList(
+      context, players, position, List<String> idPlayersPicked) async {
     List<PlayerModel> fieldPlayers = [];
     for (var fieldPlayer in players) {
       int count = 0;
-      for(var pickedPlayer in idPlayersPicked){
-        if(fieldPlayer.id == pickedPlayer){
+      for (var pickedPlayer in idPlayersPicked) {
+        if (fieldPlayer.id == pickedPlayer) {
           count++;
         }
       }
-      if(count==0){
+      if (count == 0) {
         fieldPlayer.goalkeeper ? null : fieldPlayers.add(fieldPlayer);
       }
-      
     }
-
-
 
     showDialog(
       context: context,
@@ -245,10 +300,11 @@ class TeamScreen extends StatelessWidget {
               itemCount: fieldPlayers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  onTap: (){ WriteService()
-                      .updateUserPlayers(fieldPlayers[index].id, position);
-                       Navigator.pop(context);
-                      },
+                  onTap: () {
+                    WriteService()
+                        .updateUserPlayers(fieldPlayers[index].id, position);
+                    Navigator.pop(context);
+                  },
                   title: Text(
                       '${fieldPlayers[index].name} ${fieldPlayers[index].surename}'),
                   leading: fieldPlayers[index].image == ''
@@ -299,10 +355,11 @@ class TeamScreen extends StatelessWidget {
               itemCount: goalkeepers.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  onTap: () { WriteService()
-                      .updateUserPlayers(goalkeepers[index].id, "portero");
-                      Navigator.pop(context);
-                      },
+                  onTap: () {
+                    WriteService()
+                        .updateUserPlayers(goalkeepers[index].id, "portero");
+                    Navigator.pop(context);
+                  },
                   title: Text(
                       '${goalkeepers[index].name} ${goalkeepers[index].surename}'),
                   leading: goalkeepers[index].image == ''

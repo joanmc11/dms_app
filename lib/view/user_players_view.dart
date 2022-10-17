@@ -143,6 +143,7 @@ class UserPlayerView extends StatelessWidget {
                   ),
                 ),
                 ListView.separated(
+                  reverse: true,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   separatorBuilder: (BuildContext context, int index) =>
@@ -161,9 +162,9 @@ class UserPlayerView extends StatelessWidget {
                             fontSize: 18,
                             color: user.jornadaList[index] < 0
                                 ? Colors.red
-                                : user.jornadaList[index] < 4
+                                : user.jornadaList[index] < 10
                                     ? Colors.amber
-                                    : user.jornadaList[index] < 9
+                                    : user.jornadaList[index] <= 20  
                                         ? Colors.green
                                         : Colors.blue),
                       ),

@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dms_app/controller/login_controller.dart';
 import 'package:dms_app/models/liga_model.dart';
 import 'package:dms_app/models/player_model.dart';
 import 'package:dms_app/models/user_model.dart';
@@ -68,7 +66,7 @@ class Perfil extends StatelessWidget {
                                             userName: user.name,
                                           ));
                                         },
-                                        icon: Icon(Icons.edit))
+                                        icon: const Icon(Icons.edit))
                                   ],
                                 ),
                               ),
@@ -88,6 +86,7 @@ class Perfil extends StatelessWidget {
                                     : () {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
+                                          duration: Duration(milliseconds: 800),
                                           content:
                                               Text('No eres administrador!'),
                                         ));
@@ -103,6 +102,8 @@ class Perfil extends StatelessWidget {
                                           : () {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
+                                                duration:
+                                                    Duration(milliseconds: 800),
                                                 content: Text(
                                                     'No eres administrador!'),
                                               ));
@@ -113,52 +114,66 @@ class Perfil extends StatelessWidget {
                                       icon: Icons.sports_soccer_outlined,
                                     ),
                               Padding(
-                                padding: const EdgeInsets.all(32.0),
-                                child: StreamBuilder(
-                                   stream: DataServices().playersList(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<PlayerModel>> snapshot) {
-                             if (snapshot.hasData) {
-                          var players = snapshot.data!;
-                                  return ElevatedButton.icon(
-                                      onPressed: user.admin
-                                          ? () {
-                                              if (_checkPlayersPunctuated(players)) {
-                                                _showAlertDialog(context,
-                                                    () async {
-                                                  await WriteService()
-                                                      .startJornada(
-                                                          !jornada.jornada);
-                                                  jornada.jornada
-                                                      ? WriteService()
-                                                          .endJornada()
-                                                      : WriteService()
-                                                          .newJornada();
-                                                  Navigator.pop(context);
-                                                }, jornada.jornada);
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      "Faltan jugadores por puntuar"),
-                                                ));
-                                               
-                                              }
-                                            }
-                                          : () {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                content: Text(jornada.mensaje),
-                                              ));
-                                            },
-                                      icon: const FaIcon(Icons.start),
-                                      label: Text(jornada.jornada
-                                          ? "Finalizar jornada"
-                                          : "Empezar jornada"));
-                                }else{
-                                  return const CircularProgressIndicator();
-                                }})
-                              )
+                                  padding: const EdgeInsets.all(32.0),
+                                  child: StreamBuilder(
+                                      stream: DataServices().playersList(),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot<List<PlayerModel>>
+                                              snapshot) {
+                                        if (snapshot.hasData) {
+                                          var players = snapshot.data!;
+                                          return ElevatedButton.icon(
+                                              onPressed: user.admin
+                                                  ? () {
+                                                      if (_checkPlayersPunctuated(
+                                                          players)) {
+                                                        _showAlertDialog(
+                                                            context, () async {
+                                                          await WriteService()
+                                                              .startJornada(
+                                                                  !jornada
+                                                                      .jornada);
+                                                          jornada.jornada
+                                                              ? WriteService()
+                                                                  .endJornada()
+                                                              : WriteService()
+                                                                  .newJornada();
+                                                          // ignore: use_build_context_synchronously
+                                                          Navigator.pop(
+                                                              context);
+                                                        }, jornada.jornada);
+                                                      } else {
+                                                        ScaffoldMessenger.of(
+                                                                context)
+                                                            .showSnackBar(
+                                                                const SnackBar(
+                                                          duration: Duration(
+                                                              milliseconds:
+                                                                  900),
+                                                          content: Text(
+                                                              "Faltan jugadores por puntuar"),
+                                                        ));
+                                                      }
+                                                    }
+                                                  : () {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                              SnackBar(
+                                                        duration: const Duration(
+                                                            milliseconds: 900),
+                                                        content: Text(
+                                                            jornada.mensaje),
+                                                      ));
+                                                    },
+                                              icon: const FaIcon(Icons.start),
+                                              label: Text(jornada.jornada
+                                                  ? "Finalizar jornada"
+                                                  : "Empezar jornada"));
+                                        } else {
+                                          return const CircularProgressIndicator();
+                                        }
+                                      }))
                             ],
                           );
                         } else {
@@ -217,13 +232,12 @@ class Perfil extends StatelessWidget {
   }
 }
 
-bool _checkPlayersPunctuated(List<PlayerModel> players)  {
+bool _checkPlayersPunctuated(List<PlayerModel> players) {
   //Check if all players are punctuated
   int count = 0;
-  
-  for(var item in players){
 
-    if(item.punctuated){
+  for (var item in players) {
+    if (item.punctuated) {
       count++;
     }
     continue;
